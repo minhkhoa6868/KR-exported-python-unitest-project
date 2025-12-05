@@ -1,0 +1,19 @@
+siteUrl,targetEmail,emailInput,targetPassword,passwordInput,targetResult,expectedResult,btnLoginTarget
+https://practicetestautomation.com/practice-test-login/,id=username,incorrectUser,id=password,Password123,id=error,Your username is invalid!,id=submit
+https://practicetestautomation.com/practice-test-login/,id=username,student,id=password,incorrectPassword,id=error,Your password is invalid!,id=submit
+https://practicetestautomation.com/practice-test-login/,id=username,SampleUser,id=password,123,id=error,Your username is invalid!,id=submit
+https://practicetestautomation.com/practice-test-login/,id=username,student,id=password,,id=error,Your password is invalid!,id=submit
+https://practicetestautomation.com/practice-test-login/,id=username,,id=password,Password123,id=error,Your username is invalid!,id=submit
+https://practicetestautomation.com/practice-test-login/,id=username,,id=password,,id=error,Your username is invalid!,id=submit
+https://practicetestautomation.com/practice-test-login/,id=username,InvalidUser,id=password,InvalidPass,id=error,Your username is invalid!,id=submit
+https://travel.agileway.net/login,id=username,agileway,id=password,123456,id=flash_alert,Invalid email or password,name=commit
+https://travel.agileway.net/login,id=username,ABC,id=password,test$W1se,id=flash_alert,Invalid email or password,name=commit
+https://travel.agileway.net/login,id=username,ABC,id=password,123456,id=flash_alert,Invalid email or password,name=commit
+https://travel.agileway.net/login,id=username,agileway,id=password,,id=flash_alert,Invalid email or password,name=commit
+https://travel.agileway.net/login,id=username,,id=password,test$W1se,id=flash_alert,Invalid email or password,name=commit
+https://travel.agileway.net/login,id=username,,id=password,,id=flash_alert,Invalid email or password,name=commit
+https://opensource-demo.orangehrmlive.com/web/index.php/auth/login,name=username,Admin,name=password,admin12,xpath=//div[@id='app']/div/div/div/div/div[2]/div[2]/div/div/div/p,Invalid credentials,xpath=//button[@type='submit']
+https://opensource-demo.orangehrmlive.com/web/index.php/auth/login,name=username,Admin1,name=password,admin123,xpath=//div[@id='app']/div/div/div/div/div[2]/div[2]/div/div/div/p,Invalid credentials,xpath=//button[@type='submit']
+https://opensource-demo.orangehrmlive.com/web/index.php/auth/login,name=username,Admin1,name=password,admin12,xpath=//div[@id='app']/div/div/div/div/div[2]/div[2]/div/div/div/p,Invalid credentials,xpath=//button[@type='submit']
+https://opensource-demo.orangehrmlive.com/web/index.php/auth/login,name=username,Admin,name=password,,xpath=//div[@id='app']/div/div/div/div/div[2]/div[2]/form/div[2]/div/span,Required,xpath=//button[@type='submit']
+https://opensource-demo.orangehrmlive.com/web/index.php/auth/login,name=username,,name=password,admin123,xpath=//div[@id='app']/div/div/div/div/div[2]/div[2]/form/div[1]/div/span,Required,xpath=//button[@type='submit']
