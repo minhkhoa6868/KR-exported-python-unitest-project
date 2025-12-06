@@ -1,0 +1,3 @@
+FName,LName,Email,Phone,Password,ExpectedRes
+Minh,Tu,khoa4@gmail.com,912345678,m121,Your Account Has Been Created!
+Minh,Tu,khoa5@gmail.com,912345678,m1212121212121212121,Your Account Has Been Created!

@@ -10,24 +10,21 @@ from selenium.webdriver.support import expected_conditions as EC
 class LoginFail(unittest.TestCase):
 
     def setUp(self):
-        # Chrome; works with Selenium 4 (Selenium Manager) or with chromedriver in PATH
         self.driver = webdriver.Chrome()
         self.driver.implicitly_wait(10)
 
     # ---------- locator helpers ----------
 
     def _parse_locator(self, locator: str):
-        """Convert Katalon-style locator string into (By, value)."""
         if locator is None:
             raise ValueError("Empty locator")
 
         locator = locator.strip()
 
-        # Strip wrapping quotes from CSV like "xpath=//div[...]" or "//a[...]"
+        # Strip wrapping quotes like "xpath=//div[...]"
         if locator.startswith('"') and locator.endswith('"') and len(locator) >= 2:
             locator = locator[1:-1].strip()
 
-        # Katalon / Selenium IDE styles
         if locator.startswith("id="):
             return By.ID, locator[3:]
         elif locator.startswith("name="):
@@ -39,15 +36,13 @@ class LoginFail(unittest.TestCase):
         elif locator.startswith("link="):
             return By.LINK_TEXT, locator[5:]
 
-        # Bare XPath: //..., .//..., (//...)
         if locator.startswith("//") or locator.startswith(".//") or locator.startswith("(//"):
             return By.XPATH, locator
 
-        # Fallback: treat as CSS selector
+        # fallback: treat as CSS
         return By.CSS_SELECTOR, locator
 
     def _find(self, locator: str):
-        """Shortcut around driver.find_element using Katalon-style locators."""
         by, value = self._parse_locator(locator)
         return self.driver.find_element(by, value)
 
@@ -57,50 +52,39 @@ class LoginFail(unittest.TestCase):
         driver = self.driver
         wait = WebDriverWait(driver, 10)
 
-        # This replaces: loadVars error_login.csv / endLoadVars
-        with open("error_login.csv", newline="", encoding="utf-8") as f:
+        with open("level_1/data/login_error.csv", newline="", encoding="utf-8") as f:
             reader = csv.DictReader(f)
 
             for row in reader:
-                site_url = row["siteUrl"]
-                target_email = row["targetEmail"]
-                email_input = row["emailInput"]
-                target_password = row["targetPassword"]
-                password_input = row["passwordInput"]
-                btn_login = row["btnLoginTarget"]
-                target_result = row["targetResult"]
-                expected_result = row["expectedResult"]
+                email_input = row["Email"].strip()
+                password_input = row["Password"].strip()
+                expected_result = row["ExpectedRes"].strip()
 
-                # --- open ${siteUrl} ---
-                driver.get(site_url)
+                # open login page
+                driver.get("https://ecommerce-playground.lambdatest.io/index.php?route=account/login")
 
-                # --- email field ---
-                email_elem = self._find(target_email)
+                # email
+                email_elem = self._find("id=input-email")
                 email_elem.clear()
                 email_elem.send_keys(email_input)
 
-                # --- password field ---
-                pwd_elem = self._find(target_password)
+                # password
+                pwd_elem = self._find("id=input-password")
                 pwd_elem.clear()
                 pwd_elem.send_keys(password_input)
 
-                # --- click login button ---
-                self._find(btn_login).click()
+                # click login
+                self._find("xpath=//input[@value='Login']").click()
 
-                # --- verifyText ${targetResult} ${expectedResult} ---
+                # otherwise, we expect an error message containing expected_result
+                by, value = self._parse_locator("css=div.alert.alert-danger")
 
-                # Wait for the result element to be visible
-                by, value = self._parse_locator(target_result)
-                result_elem = wait.until(
-                    EC.visibility_of_element_located((by, value))
-                )
+                # wait for the error alert to be visible
+                alert_elem = wait.until(EC.visibility_of_element_located((by, value)))
 
-                # Wait until the element actually has some text
-                wait.until(lambda d: result_elem.text.strip() != "")
+                actual_text = alert_elem.text.strip()
+                print(f"Actual text: '{actual_text}'")
 
-                actual_text = result_elem.text.strip()
-
-                # Katalon verifyText is closer to "contains" than strict equality
                 self.assertIn(expected_result, actual_text)
 
     def tearDown(self):

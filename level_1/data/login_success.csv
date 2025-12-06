@@ -1,0 +1,5 @@
+Email,Password,ExpectedRes
+aschieferstein2@boston.com,12345678,
+example1234567@example.com,1234,
+UserOne@Example.com,correctPass123,
+test.user+qa@example.com,Pass@12345,

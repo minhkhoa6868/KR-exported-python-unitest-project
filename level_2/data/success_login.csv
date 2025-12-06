@@ -1,0 +1,5 @@
+siteUrl,targetEmail,emailInput,targetPassword,passwordInput,targetResult,expectedResult,btnLoginTarget,btnLogoutTarget
+https://practicetestautomation.com/practice-test-login/,id=username,student,id=password,Password123,xpath=//div[@id='loop-container']/div/article/div/h1,Logged In Successfully,id=submit,link=Log out
+https://travel.agileway.net/login,id=username,agileway,id=password,test$W1se,id=flash_notice,Signed in!,name=commit,link=Sign off (agileway)
+https://demo.nopcommerce.com/login,id=Email,tri@example.com,id=Password,123456,//a[@class='ico-logout' and normalize-space()='Log out'],Log out,xpath=//main[@id='main']/div/section/div/div[2]/div/div[2]/form/div[2]/button,link=Log out
+https://ecommerce-playground.lambdatest.io/index.php?route=account/login,id=input-email,aschieferstein2@boston.com,id=input-password,12345678,xpath=//div[@id='content']/div/h2,My Account,xpath=//input[@value='Login'],link=Logout

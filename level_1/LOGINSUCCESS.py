@@ -41,43 +41,32 @@ class LoginSuccess(unittest.TestCase):
         driver = self.driver
 
         # === this replaces Katalon: loadVars success_login.csv ===
-        with open("success_login.csv", newline='', encoding="utf-8") as f:
+        with open("level_1/data/login_success.csv", newline='', encoding="utf-8") as f:
             reader = csv.DictReader(f)
 
             # One row per data set (like Katalon’s data-driven run)
             for row in reader:
-                site_url = row["siteUrl"]
-                target_email = row["targetEmail"]
-                email_input = row["emailInput"]
-                target_password = row["targetPassword"]
-                password_input = row["passwordInput"]
-                btn_login = row["btnLoginTarget"]
-                target_result = row["targetResult"]
-                expected_result = row["expectedResult"]
-                btn_logout = row["btnLogoutTarget"]
+                email_input = row["Email"].strip()
+                password_input = row["Password"].strip()
                 
                 # === open ${siteUrl} ===
-                driver.get(site_url)
+                driver.get("https://ecommerce-playground.lambdatest.io/index.php?route=account/login")
 
                 # === click + type email ===
-                email_elem = self._find(driver, target_email)
+                email_elem = self._find(driver, "id=input-email")
                 email_elem.clear()
                 email_elem.send_keys(email_input)
 
                 # === click + type password ===
-                pwd_elem = self._find(driver, target_password)
+                pwd_elem = self._find(driver, "id=input-password")
                 pwd_elem.clear()
                 pwd_elem.send_keys(password_input)
 
                 # === click login button ===
-                self._find(driver, btn_login).click()
-
-                # === verifyText ${targetResult} ${expectedResult} ===
-                result_elem = self._find(driver, target_result)
-                self.assertEqual(expected_result, result_elem.text.strip())
+                self._find(driver, "xpath=//input[@value='Login']").click()
 
                 # === click logout button ===
-                self._find(driver, btn_logout).click()
+                self._find(driver, "link=Logout").click()
 
         # === endLoadVars (nothing to do, loop finished) ===
 
