@@ -45,28 +45,32 @@ class LoginSuccess(unittest.TestCase):
             reader = csv.DictReader(f)
 
             # One row per data set (like Katalon’s data-driven run)
-            for row in reader:
+            for i, row in enumerate(reader, start=1):
                 email_input = row["Email"].strip()
                 password_input = row["Password"].strip()
                 
-                # === open ${siteUrl} ===
-                driver.get("https://ecommerce-playground.lambdatest.io/index.php?route=account/login")
+                with self.subTest(dataset=i, email=email_input):
+                
+                    # === open ${siteUrl} ===
+                    driver.get("https://ecommerce-playground.lambdatest.io/index.php?route=account/login")
 
-                # === click + type email ===
-                email_elem = self._find(driver, "id=input-email")
-                email_elem.clear()
-                email_elem.send_keys(email_input)
+                    # === click + type email ===
+                    email_elem = self._find(driver, "id=input-email")
+                    email_elem.clear()
+                    email_elem.send_keys(email_input)
 
-                # === click + type password ===
-                pwd_elem = self._find(driver, "id=input-password")
-                pwd_elem.clear()
-                pwd_elem.send_keys(password_input)
+                    # === click + type password ===
+                    pwd_elem = self._find(driver, "id=input-password")
+                    pwd_elem.clear()
+                    pwd_elem.send_keys(password_input)
 
-                # === click login button ===
-                self._find(driver, "xpath=//input[@value='Login']").click()
+                    # === click login button ===
+                    self._find(driver, "xpath=//input[@value='Login']").click()
 
-                # === click logout button ===
-                self._find(driver, "link=Logout").click()
+                    # === click logout button ===
+                    self._find(driver, "link=Logout").click()
+                    
+                    print(f"Dataset {i}: PASSED")
 
         # === endLoadVars (nothing to do, loop finished) ===
 
@@ -74,4 +78,4 @@ class LoginSuccess(unittest.TestCase):
         self.driver.quit()
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)

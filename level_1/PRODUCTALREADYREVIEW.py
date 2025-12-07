@@ -50,68 +50,72 @@ class ProductAlreadyReview(unittest.TestCase):
         with open("level_1/data/product-already-rv.csv", newline='', encoding="utf-8") as f:
             reader = csv.DictReader(f)
 
-            for row in reader:
+            for i,row in enumerate(reader, start=1):
                 name_input_1 = row["Name1"].strip()
                 review_input_1 = row["Review1"].strip()
                 name_input_2 = row["Name2"].strip()
                 review_input_2 = row["Review2"].strip()
                 expected_result = row["ExpectedRes"].strip()
-
-                # open product page
-                driver.get("https://ecommerce-playground.lambdatest.io/index.php?route=product/product&path=34&product_id=33")
-
-                # ---- First review submission ----
-                # Name
-                name_elem = self._find(driver, "id=input-name")
-                name_elem.clear()
-                name_elem.send_keys(name_input_1)
-
-                # Rating (click one of the stars)
-                self._find(driver, "xpath=//form[@id='form-review']/div/span/label").click()
-
-                # Review text
-                review_elem = self._find(driver, "id=input-review")
-                review_elem.clear()
-                review_elem.send_keys(review_input_1)
-
-                # Submit review
-                self._find(driver, "id=button-review").click()
                 
-                # ---- Second review submission ----
-                # Name
-                name_elem = self._find(driver, "id=input-name")
-                name_elem.clear()
-                name_elem.send_keys(name_input_2)
-                
-                # Rating (click one of the stars)
-                self._find(driver, "xpath=//form[@id='form-review']/div/span/label").click()
-                
-                # Review text
-                review_elem = self._find(driver, "id=input-review")
-                review_elem.clear()
-                review_elem.send_keys(review_input_2)
-                
-                # Submit review
-                self._find(driver, "id=button-review").click()
+                with self.subTest(dataset=i, name1=name_input_1, name2=name_input_2):
 
-                # ---- Wait for validation message ----
-                # This is the same locator you used, but now we **wait** for its text.
-                by = By.XPATH
-                value = "//form[@id='form-review']/div[2]"
+                    # open product page
+                    driver.get("https://ecommerce-playground.lambdatest.io/index.php?route=product/product&path=34&product_id=33")
 
-                # Wait until the container is visible
-                wait.until(EC.visibility_of_element_located((by, value)))
-                # Wait until it contains some non-empty text
-                wait.until(lambda d: d.find_element(by, value).text.strip() != "")
+                    # ---- First review submission ----
+                    # Name
+                    name_elem = self._find(driver, "id=input-name")
+                    name_elem.clear()
+                    name_elem.send_keys(name_input_1)
 
-                result_elem = driver.find_element(by, value)
-                actual_text = result_elem.text.strip()
+                    # Rating (click one of the stars)
+                    self._find(driver, "xpath=//form[@id='form-review']/div/span/label").click()
 
-                # Safer to use "contains" just like Katalon often does
-                self.assertIn(expected_result, actual_text)
+                    # Review text
+                    review_elem = self._find(driver, "id=input-review")
+                    review_elem.clear()
+                    review_elem.send_keys(review_input_1)
+
+                    # Submit review
+                    self._find(driver, "id=button-review").click()
+                    
+                    # ---- Second review submission ----
+                    # Name
+                    name_elem = self._find(driver, "id=input-name")
+                    name_elem.clear()
+                    name_elem.send_keys(name_input_2)
+                    
+                    # Rating (click one of the stars)
+                    self._find(driver, "xpath=//form[@id='form-review']/div/span/label").click()
+                    
+                    # Review text
+                    review_elem = self._find(driver, "id=input-review")
+                    review_elem.clear()
+                    review_elem.send_keys(review_input_2)
+                    
+                    # Submit review
+                    self._find(driver, "id=button-review").click()
+
+                    # ---- Wait for validation message ----
+                    # This is the same locator you used, but now we **wait** for its text.
+                    by = By.XPATH
+                    value = "//form[@id='form-review']/div[2]"
+
+                    # Wait until the container is visible
+                    wait.until(EC.visibility_of_element_located((by, value)))
+                    # Wait until it contains some non-empty text
+                    wait.until(lambda d: d.find_element(by, value).text.strip() != "")
+
+                    result_elem = driver.find_element(by, value)
+                    actual_text = result_elem.text.strip()
+
+                    # Safer to use "contains" just like Katalon often does
+                    self.assertIn(expected_result, actual_text)
+                    
+                    print(f"Dataset {i}: PASSED")
 
     def tearDown(self):
         self.driver.quit()
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)

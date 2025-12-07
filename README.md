@@ -16,17 +16,17 @@
 # How to run each file
 ## Level 1
 ```
-python3 level_1/<file_you_want>.py
+python3 -m unittest level_1.<file_you_want> -v
 ```
 Example:
 ```
-python3 level_1/LOGINSUCCESS.py
+python3 -m unittest level_1.LOGINSUCCESS -v
 ```
 ## Level 2
 ```
-python3 level_2/<file_you_want>.py
+python3 -m unittest level_2.<file_you_want> -v
 ```
 Example:
 ```
-python3 level_2/LOGINSUCCESS.py
+python3 -m unittest level_2.LOGINSUCCESS -v
 ```

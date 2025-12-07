@@ -50,45 +50,49 @@ class ProductRating(unittest.TestCase):
         with open("level_1/data/product-rv-rating.csv", newline='', encoding="utf-8") as f:
             reader = csv.DictReader(f)
 
-            for row in reader:
+            for i, row in enumerate(reader, start=1):
                 name_input = row["Name"].strip()
                 review_input = row["Review"].strip()
                 expected_result = row["ExpectedRes"].strip()
+                
+                with self.subTest(dataset=i, name=name_input):
 
-                # open product page
-                driver.get("https://ecommerce-playground.lambdatest.io/index.php?route=product/product&path=34&product_id=33")
+                    # open product page
+                    driver.get("https://ecommerce-playground.lambdatest.io/index.php?route=product/product&path=34&product_id=33")
 
-                # Name
-                name_elem = self._find(driver, "id=input-name")
-                name_elem.clear()
-                name_elem.send_keys(name_input)
+                    # Name
+                    name_elem = self._find(driver, "id=input-name")
+                    name_elem.clear()
+                    name_elem.send_keys(name_input)
 
-                # Review text
-                review_elem = self._find(driver, "id=input-review")
-                review_elem.clear()
-                review_elem.send_keys(review_input)
+                    # Review text
+                    review_elem = self._find(driver, "id=input-review")
+                    review_elem.clear()
+                    review_elem.send_keys(review_input)
 
-                # Submit review
-                self._find(driver, "id=button-review").click()
+                    # Submit review
+                    self._find(driver, "id=button-review").click()
 
-                # ---- Wait for validation message ----
-                # This is the same locator you used, but now we **wait** for its text.
-                by = By.XPATH
-                value = "//form[@id='form-review']/div[2]"
+                    # ---- Wait for validation message ----
+                    # This is the same locator you used, but now we **wait** for its text.
+                    by = By.XPATH
+                    value = "//form[@id='form-review']/div[2]"
 
-                # Wait until the container is visible
-                wait.until(EC.visibility_of_element_located((by, value)))
-                # Wait until it contains some non-empty text
-                wait.until(lambda d: d.find_element(by, value).text.strip() != "")
+                    # Wait until the container is visible
+                    wait.until(EC.visibility_of_element_located((by, value)))
+                    # Wait until it contains some non-empty text
+                    wait.until(lambda d: d.find_element(by, value).text.strip() != "")
 
-                result_elem = driver.find_element(by, value)
-                actual_text = result_elem.text.strip()
+                    result_elem = driver.find_element(by, value)
+                    actual_text = result_elem.text.strip()
 
-                # Safer to use "contains" just like Katalon often does
-                self.assertIn(expected_result, actual_text)
+                    # Safer to use "contains" just like Katalon often does
+                    self.assertIn(expected_result, actual_text)
+                    
+                    print(f"Dataset {i}: PASSED")
 
     def tearDown(self):
         self.driver.quit()
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)

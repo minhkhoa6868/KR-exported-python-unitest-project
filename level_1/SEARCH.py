@@ -51,46 +51,50 @@ class Search(unittest.TestCase):
         with open("level_1/data/search.csv", newline='', encoding="utf-8") as f:
             reader = csv.DictReader(f)
 
-            for row in reader:
+            for i,row in enumerate(reader, start=1):
                 search_input = row["Keywords"].strip()
                 expected_result = row["ExpectedRes"].strip()
+                
+                with self.subTest(dataset=i, search=search_input):
 
-                # open home page
-                driver.get("https://ecommerce-playground.lambdatest.io/index.php?route=common/home")
+                    # open home page
+                    driver.get("https://ecommerce-playground.lambdatest.io/index.php?route=common/home")
 
-                # Enter search keywords
-                search_elem = self._find(driver, "name=search")
-                search_elem.clear()
-                search_elem.send_keys(search_input)
+                    # Enter search keywords
+                    search_elem = self._find(driver, "name=search")
+                    search_elem.clear()
+                    search_elem.send_keys(search_input)
 
-                # Click search button
-                self._find(driver, "xpath=//button[@type='submit']").click()
+                    # Click search button
+                    self._find(driver, "xpath=//button[@type='submit']").click()
 
-                # ---- wait for results and click first product image ----
-                # first product card image
-                product_img_locator = (By.XPATH, "(//div[contains(@class,'product-layout')]//img)[1]")
+                    # ---- wait for results and click first product image ----
+                    # first product card image
+                    product_img_locator = (By.XPATH, "(//div[contains(@class,'product-layout')]//img)[1]")
 
-                # Wait until the image is clickable, retry if it goes stale
-                for _ in range(3):
-                    try:
-                        img = wait.until(EC.element_to_be_clickable(product_img_locator))
-                        img.click()
-                        break
-                    except StaleElementReferenceException:
-                        # DOM refreshed between find and click: try again
-                        continue
-                else:
-                    self.fail("Could not click product image due to repeated stale elements")
+                    # Wait until the image is clickable, retry if it goes stale
+                    for _ in range(3):
+                        try:
+                            img = wait.until(EC.element_to_be_clickable(product_img_locator))
+                            img.click()
+                            break
+                        except StaleElementReferenceException:
+                            # DOM refreshed between find and click: try again
+                            continue
+                    else:
+                        self.fail("Could not click product image due to repeated stale elements")
 
-                # ---- verify product title ----
-                title_locator = (By.XPATH, "//div[@id='entry_216816']/h1")
-                result_elem = wait.until(EC.visibility_of_element_located(title_locator))
-                actual_text = result_elem.text.strip()
+                    # ---- verify product title ----
+                    title_locator = (By.XPATH, "//div[@id='entry_216816']/h1")
+                    result_elem = wait.until(EC.visibility_of_element_located(title_locator))
+                    actual_text = result_elem.text.strip()
 
-                self.assertEqual(expected_result, actual_text)
+                    self.assertEqual(expected_result, actual_text)
+                    
+                    print(f"Dataset {i}: PASSED")
 
     def tearDown(self):
         self.driver.quit()
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)

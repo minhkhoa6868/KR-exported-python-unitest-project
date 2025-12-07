@@ -44,7 +44,7 @@ class LoginSuccess(unittest.TestCase):
             reader = csv.DictReader(f)
 
             # One row per data set (like Katalon’s data-driven run)
-            for row in reader:
+            for i, row in enumerate(reader, start=1):
                 site_url = row["siteUrl"]
                 target_email = row["targetEmail"]
                 email_input = row["emailInput"].strip()
@@ -55,28 +55,32 @@ class LoginSuccess(unittest.TestCase):
                 expected_result = row["expectedResult"].strip()
                 btn_logout = row["btnLogoutTarget"]
                 
-                # === open ${siteUrl} ===
-                driver.get(site_url)
+                with self.subTest(dataset=i, siteUrl=site_url):
+                
+                    # === open ${siteUrl} ===
+                    driver.get(site_url)
 
-                # === click + type email ===
-                email_elem = self._find(driver, target_email)
-                email_elem.clear()
-                email_elem.send_keys(email_input)
+                    # === click + type email ===
+                    email_elem = self._find(driver, target_email)
+                    email_elem.clear()
+                    email_elem.send_keys(email_input)
 
-                # === click + type password ===
-                pwd_elem = self._find(driver, target_password)
-                pwd_elem.clear()
-                pwd_elem.send_keys(password_input)
+                    # === click + type password ===
+                    pwd_elem = self._find(driver, target_password)
+                    pwd_elem.clear()
+                    pwd_elem.send_keys(password_input)
 
-                # === click login button ===
-                self._find(driver, btn_login).click()
+                    # === click login button ===
+                    self._find(driver, btn_login).click()
 
-                # === verifyText ${targetResult} ${expectedResult} ===
-                result_elem = self._find(driver, target_result)
-                self.assertEqual(expected_result, result_elem.text.strip())
+                    # === verifyText ${targetResult} ${expectedResult} ===
+                    result_elem = self._find(driver, target_result)
+                    self.assertEqual(expected_result, result_elem.text.strip())
 
-                # === click logout button ===
-                self._find(driver, btn_logout).click()
+                    # === click logout button ===
+                    self._find(driver, btn_logout).click()
+                    
+                    print(f"Dataset {i}: PASSED")
 
         # === endLoadVars (nothing to do, loop finished) ===
 

@@ -55,40 +55,44 @@ class LoginFail(unittest.TestCase):
         with open("level_1/data/login_error.csv", newline="", encoding="utf-8") as f:
             reader = csv.DictReader(f)
 
-            for row in reader:
+            for i, row in enumerate(reader, start=1):
                 email_input = row["Email"].strip()
                 password_input = row["Password"].strip()
                 expected_result = row["ExpectedRes"].strip()
+                
+                with self.subTest(dataset=i, email=email_input):
 
-                # open login page
-                driver.get("https://ecommerce-playground.lambdatest.io/index.php?route=account/login")
+                    # open login page
+                    driver.get("https://ecommerce-playground.lambdatest.io/index.php?route=account/login")
 
-                # email
-                email_elem = self._find("id=input-email")
-                email_elem.clear()
-                email_elem.send_keys(email_input)
+                    # email
+                    email_elem = self._find("id=input-email")
+                    email_elem.clear()
+                    email_elem.send_keys(email_input)
 
-                # password
-                pwd_elem = self._find("id=input-password")
-                pwd_elem.clear()
-                pwd_elem.send_keys(password_input)
+                    # password
+                    pwd_elem = self._find("id=input-password")
+                    pwd_elem.clear()
+                    pwd_elem.send_keys(password_input)
 
-                # click login
-                self._find("xpath=//input[@value='Login']").click()
+                    # click login
+                    self._find("xpath=//input[@value='Login']").click()
 
-                # otherwise, we expect an error message containing expected_result
-                by, value = self._parse_locator("css=div.alert.alert-danger")
+                    # otherwise, we expect an error message containing expected_result
+                    by, value = self._parse_locator("css=div.alert.alert-danger")
 
-                # wait for the error alert to be visible
-                alert_elem = wait.until(EC.visibility_of_element_located((by, value)))
+                    # wait for the error alert to be visible
+                    alert_elem = wait.until(EC.visibility_of_element_located((by, value)))
 
-                actual_text = alert_elem.text.strip()
+                    actual_text = alert_elem.text.strip()
 
-                self.assertIn(expected_result, actual_text)
+                    self.assertIn(expected_result, actual_text)
+                    
+                    print(f"Dataset {i}: PASSED")
 
     def tearDown(self):
         self.driver.quit()
 
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)

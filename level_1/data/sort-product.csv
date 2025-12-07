@@ -1,0 +1,31 @@
+SortType,Index,ProductName,ProductPrice
+az,1,Sauce Labs Backpack,$29.99
+az,2,Sauce Labs Bike Light,$9.99
+az,3,Sauce Labs Bolt T-Shirt,$15.99
+az,4,Sauce Labs Fleece Jacket,$49.99
+az,5,Sauce Labs Onesie,$7.99
+az,6,Test.allTheThings() T-Shirt (Red),$15.99
+za,1,Test.allTheThings() T-Shirt (Red),$15.99
+za,2,Sauce Labs Onesie,$7.99
+za,3,Sauce Labs Fleece Jacket,$49.99
+za,4,Sauce Labs Bolt T-Shirt,$15.99
+za,5,Sauce Labs Bike Light,$9.99
+za,6,Sauce Labs Backpack,$29.99
+lohi,1,Sauce Labs Onesie,$7.99
+lohi,2,Sauce Labs Bike Light,$9.99
+lohi,3,Sauce Labs Bolt T-Shirt,$15.99
+lohi,4,Test.allTheThings() T-Shirt (Red),$15.99
+lohi,5,Sauce Labs Backpack,$29.99
+lohi,6,Sauce Labs Fleece Jacket,$49.99
+hilo,1,Sauce Labs Fleece Jacket,$49.99
+hilo,2,Sauce Labs Backpack,$29.99
+hilo,3,Sauce Labs Bolt T-Shirt,$15.99
+hilo,4,Test.allTheThings() T-Shirt (Red),$15.99
+hilo,5,Sauce Labs Bike Light,$9.99
+hilo,6,Sauce Labs Onesie,$7.99
+haha,1,Sauce Labs Fleece Jacket,$49.99
+haha,2,Sauce Labs Backpack,$29.99
+haha,3,Sauce Labs Bolt T-Shirt,$15.99
+haha,4,Test.allTheThings() T-Shirt (Red),$15.99
+haha,5,Sauce Labs Bike Light,$9.99
+haha,6,Sauce Labs Onesie,$7.99

@@ -60,7 +60,7 @@ class LoginFail(unittest.TestCase):
         with open("level_2/data/error_login.csv", newline="", encoding="utf-8") as f:
             reader = csv.DictReader(f)
 
-            for row in reader:
+            for i, row in enumerate(reader, start=1):
                 site_url = row["siteUrl"]
                 target_email = row["targetEmail"]
                 email_input = row["emailInput"].strip()
@@ -69,42 +69,46 @@ class LoginFail(unittest.TestCase):
                 btn_login = row["btnLoginTarget"]
                 target_result = row["targetResult"]
                 expected_result = row["expectedResult"].strip()
+                
+                with self.subTest(dataset=i, siteUrl=site_url):
 
-                # --- open ${siteUrl} ---
-                driver.get(site_url)
+                    # --- open ${siteUrl} ---
+                    driver.get(site_url)
 
-                # --- email field ---
-                email_elem = self._find(target_email)
-                email_elem.clear()
-                email_elem.send_keys(email_input)
+                    # --- email field ---
+                    email_elem = self._find(target_email)
+                    email_elem.clear()
+                    email_elem.send_keys(email_input)
 
-                # --- password field ---
-                pwd_elem = self._find(target_password)
-                pwd_elem.clear()
-                pwd_elem.send_keys(password_input)
+                    # --- password field ---
+                    pwd_elem = self._find(target_password)
+                    pwd_elem.clear()
+                    pwd_elem.send_keys(password_input)
 
-                # --- click login button ---
-                self._find(btn_login).click()
+                    # --- click login button ---
+                    self._find(btn_login).click()
 
-                # --- verifyText ${targetResult} ${expectedResult} ---
+                    # --- verifyText ${targetResult} ${expectedResult} ---
 
-                # Wait for the result element to be visible
-                by, value = self._parse_locator(target_result)
-                result_elem = wait.until(
-                    EC.visibility_of_element_located((by, value))
-                )
+                    # Wait for the result element to be visible
+                    by, value = self._parse_locator(target_result)
+                    result_elem = wait.until(
+                        EC.visibility_of_element_located((by, value))
+                    )
 
-                # Wait until the element actually has some text
-                wait.until(lambda d: result_elem.text.strip() != "")
+                    # Wait until the element actually has some text
+                    wait.until(lambda d: result_elem.text.strip() != "")
 
-                actual_text = result_elem.text.strip()
+                    actual_text = result_elem.text.strip()
 
-                # Katalon verifyText is closer to "contains" than strict equality
-                self.assertIn(expected_result, actual_text)
+                    # Katalon verifyText is closer to "contains" than strict equality
+                    self.assertIn(expected_result, actual_text)
+                    
+                    print(f"Dataset {i}: PASSED")
 
     def tearDown(self):
         self.driver.quit()
 
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)

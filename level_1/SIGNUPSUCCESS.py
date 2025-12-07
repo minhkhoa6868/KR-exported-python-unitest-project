@@ -50,73 +50,77 @@ class SignupSuccess(unittest.TestCase):
         with open("level_1/data/signup-success.csv", newline="", encoding="utf-8") as f:
             reader = csv.DictReader(f)
 
-            for row in reader:
+            for i, row in enumerate(reader, start=1):
                 firstname_input = row["FName"].strip()
                 lastname_input = row["LName"].strip()
                 email_input = row["Email"].strip()
                 phone_input = row["Phone"].strip()
                 password_input = row["Password"].strip()
                 expected_result = row["ExpectedRes"].strip()
-
-                # open register page
-                driver.get("https://ecommerce-playground.lambdatest.io/index.php?route=account/register")
-
-                # first name input
-                firstname_elem = self._find(driver, "id=input-firstname")
-                firstname_elem.clear()
-                firstname_elem.send_keys(firstname_input)
                 
-                # last name input
-                lastname_elem = self._find(driver, "id=input-lastname")
-                lastname_elem.clear()
-                lastname_elem.send_keys(lastname_input)
-                
-                # email input
-                email_elem = self._find(driver, "id=input-email")
-                email_elem.clear()
-                email_elem.send_keys(email_input)
-                
-                # phone input
-                phone_elem = self._find(driver, "id=input-telephone")
-                phone_elem.clear()
-                phone_elem.send_keys(phone_input)
-                
-                # password input
-                password_elem = self._find(driver, "id=input-password")
-                password_elem.clear()
-                password_elem.send_keys(password_input)
-                
-                # confirm password input
-                confirm_elem = self._find(driver, "id=input-confirm")
-                confirm_elem.clear()
-                confirm_elem.send_keys(password_input)
+                with self.subTest(dataset=i, firstname=firstname_input, lastname=lastname_input):
 
-                # agree to privacy policy
-                self._find(driver, "xpath=//div[@id='content']/form/div/div/div/label").click()
+                    # open register page
+                    driver.get("https://ecommerce-playground.lambdatest.io/index.php?route=account/register")
 
-                # click Continue
-                self._find(driver, "xpath=//input[@value='Continue']").click()
+                    # first name input
+                    firstname_elem = self._find(driver, "id=input-firstname")
+                    firstname_elem.clear()
+                    firstname_elem.send_keys(firstname_input)
+                    
+                    # last name input
+                    lastname_elem = self._find(driver, "id=input-lastname")
+                    lastname_elem.clear()
+                    lastname_elem.send_keys(lastname_input)
+                    
+                    # email input
+                    email_elem = self._find(driver, "id=input-email")
+                    email_elem.clear()
+                    email_elem.send_keys(email_input)
+                    
+                    # phone input
+                    phone_elem = self._find(driver, "id=input-telephone")
+                    phone_elem.clear()
+                    phone_elem.send_keys(phone_input)
+                    
+                    # password input
+                    password_elem = self._find(driver, "id=input-password")
+                    password_elem.clear()
+                    password_elem.send_keys(password_input)
+                    
+                    # confirm password input
+                    confirm_elem = self._find(driver, "id=input-confirm")
+                    confirm_elem.clear()
+                    confirm_elem.send_keys(password_input)
 
-                # ---- wait for new page header (avoid stale element) ----
-                header_locator = (By.XPATH, "//div[@id='content']/h1")
+                    # agree to privacy policy
+                    self._find(driver, "xpath=//div[@id='content']/form/div/div/div/label").click()
 
-                for _ in range(3):
-                    try:
-                        result_elem = wait.until(EC.visibility_of_element_located(header_locator))
-                        actual_text = result_elem.text.strip()
-                        break
-                    except StaleElementReferenceException:
-                        continue
-                else:
-                    self.fail("Header element kept going stale after registration")
+                    # click Continue
+                    self._find(driver, "xpath=//input[@value='Continue']").click()
 
-                self.assertEqual(expected_result, actual_text)
+                    # ---- wait for new page header (avoid stale element) ----
+                    header_locator = (By.XPATH, "//div[@id='content']/h1")
 
-                # logout to reset state between rows
-                self._find(driver, "link=Logout").click()
+                    for _ in range(3):
+                        try:
+                            result_elem = wait.until(EC.visibility_of_element_located(header_locator))
+                            actual_text = result_elem.text.strip()
+                            break
+                        except StaleElementReferenceException:
+                            continue
+                    else:
+                        self.fail("Header element kept going stale after registration")
+
+                    self.assertEqual(expected_result, actual_text)
+
+                    # logout to reset state between rows
+                    self._find(driver, "link=Logout").click()
+                    
+                    print(f"Dataset {i}: PASSED")
 
     def tearDown(self):
         self.driver.quit()
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)
