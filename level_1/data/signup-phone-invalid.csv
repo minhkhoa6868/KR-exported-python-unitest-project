@@ -1,0 +1,3 @@
+FName,LName,Email,Phone,Password,ExpectedRes
+Minh,Tu,i@gmail.com,12,m121,Telephone must be between 3 and 32 characters!
+Minh,Tu,ii@gmail.com,,m121,Telephone must be between 3 and 32 characters!

@@ -1,0 +1,2 @@
+FName,LName,Email,Phone,Password,ExpectedRes1,ExpectedRes2
+Khoa,Beo,khoakhbeo2@gmail.com,912345678,m121,Your Account Has Been Created!,Warning: E-Mail Address is already registered!

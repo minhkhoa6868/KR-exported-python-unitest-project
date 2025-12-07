@@ -1,0 +1,3 @@
+FName,LName,Email,Phone,Password,ExpectedRes
+Minh,Tu,i@gmail.com,abcdef,m121,Telephone must be numeric!
+Minh,Tu,3@gmail.com,1234@5678,m122,Telephone must be numeric!

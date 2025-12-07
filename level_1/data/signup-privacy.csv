@@ -1,0 +1,2 @@
+FName,LName,Email,Phone,Password,ExpectedRes
+Minh,Tu,sonbeo@gmail.com,912345678,m1214,Warning: You must agree to the Privacy Policy!
