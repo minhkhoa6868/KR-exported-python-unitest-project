@@ -83,7 +83,6 @@ class LoginFail(unittest.TestCase):
                 alert_elem = wait.until(EC.visibility_of_element_located((by, value)))
 
                 actual_text = alert_elem.text.strip()
-                print(f"Actual text: '{actual_text}'")
 
                 self.assertIn(expected_result, actual_text)
 
